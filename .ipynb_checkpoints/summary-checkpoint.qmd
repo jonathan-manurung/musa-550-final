@@ -1,0 +1,23 @@
+---
+title: "Conclusive Overview"
+---
+
+<!-- Use a grid -->
+::: {.grid}
+
+<!-- Text gets a column with width 8/12 -->
+::: {.g-col-8}
+
+In summary, the increase from 0.74 to 0.79 after adding 9 spatial features suggests an improvement and enhanced the predictive performance of house price prediction model. 
+
+The increase also suggest that the spatial features added, such as internal characteristic from property assessment, public amenity and disamenity features, and crimes, provide contribution in building a more accurate prediction model. Means that there are spatial patterns of neighborhood characteristic that affect the house prices.
+
+The feature importance analysis plot presents which spatial features have the most significant impact on the model's predictive performance.
+Total Livable Area, Distance to City Hall, Distance to Aggrevated Assault Crime are the top three significant features to the house price in Philadelphia
+
+::: 
+
+:::
+
+
+

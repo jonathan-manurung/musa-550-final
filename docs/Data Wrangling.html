@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>House Price Prediction - DATA WRANGLING</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Data Wrangling.html">Data Wrangling</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-center sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./images/Home_Price_Model.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      <div class="sidebar-tools-main">
+    <a href="https://github.com/jonathan-manurung/" rel="" title="MUSA 550 GitHub" class="quarto-navigation-tool px-1" aria-label="MUSA 550 GitHub"><i class="bi bi-github"></i></a>
+</div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fundamentals</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Data Wrangling.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Data Wrangling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#" aria-expanded="true">
+ <span class="menu-text">Analysis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analysis/Analysis and Result.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BUILDING THE PREDICTIVE MODEL</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Conclusive Overview</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page-right" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">DATA WRANGLING</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Data form Philadelphia’s Open Data portal are used in building this model. The dataset that is expected to be significant features, in building a predictive model of house price</p>
+<div class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;skip&quot;}" data-tags="[]" data-execution_count="4">
+<div class="cell-output cell-output-display">
+
+<script type="application/javascript">
+(function(root) {
+  function now() {
+    return new Date();
+  }
+
+  var force = true;
+  var py_version = '3.2.1'.replace('rc', '-rc.').replace('.dev', '-dev.');
+  var is_dev = py_version.indexOf("+") !== -1 || py_version.indexOf("-") !== -1;
+  var reloading = false;
+  var Bokeh = root.Bokeh;
+  var bokeh_loaded = Bokeh != null && (Bokeh.version === py_version || (Bokeh.versions !== undefined && Bokeh.versions.has(py_version)));
+
+  if (typeof (root._bokeh_timeout) === "undefined" || force) {
+    root._bokeh_timeout = Date.now() + 5000;
+    root._bokeh_failed_load = false;
+  }
+
+  function run_callbacks() {
+    try {
+      root._bokeh_onload_callbacks.forEach(function(callback) {
+        if (callback != null)
+          callback();
+      });
+    } finally {
+      delete root._bokeh_onload_callbacks;
+    }
+    console.debug("Bokeh: all callbacks have finished");
+  }
+
+  function load_libs(css_urls, js_urls, js_modules, js_exports, callback) {
+    if (css_urls == null) css_urls = [];
+    if (js_urls == null) js_urls = [];
+    if (js_modules == null) js_modules = [];
+    if (js_exports == null) js_exports = {};
+
+    root._bokeh_onload_callbacks.push(callback);
+
+    if (root._bokeh_is_loading > 0) {
+      console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
+      return null;
+    }
+    if (js_urls.length === 0 && js_modules.length === 0 && Object.keys(js_exports).length === 0) {
+      run_callbacks();
+      return null;
+    }
+    if (!reloading) {
+      console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
+    }
+
+    function on_load() {
+      root._bokeh_is_loading--;
+      if (root._bokeh_is_loading === 0) {
+        console.debug("Bokeh: all BokehJS libraries/stylesheets loaded");
+        run_callbacks()
+      }
+    }
+    window._bokeh_on_load = on_load
+
+    function on_error() {
+      console.error("failed to load " + url);
+    }
+
+    var skip = [];
+    if (window.requirejs) {
+      window.requirejs.config({'packages': {}, 'paths': {'jspanel': 'https://cdn.jsdelivr.net/npm/jspanel4@4.12.0/dist/jspanel', 'jspanel-modal': 'https://cdn.jsdelivr.net/npm/jspanel4@4.12.0/dist/extensions/modal/jspanel.modal', 'jspanel-tooltip': 'https://cdn.jsdelivr.net/npm/jspanel4@4.12.0/dist/extensions/tooltip/jspanel.tooltip', 'jspanel-hint': 'https://cdn.jsdelivr.net/npm/jspanel4@4.12.0/dist/extensions/hint/jspanel.hint', 'jspanel-layout': 'https://cdn.jsdelivr.net/npm/jspanel4@4.12.0/dist/extensions/layout/jspanel.layout', 'jspanel-contextmenu': 'https://cdn.jsdelivr.net/npm/jspanel4@4.12.0/dist/extensions/contextmenu/jspanel.contextmenu', 'jspanel-dock': 'https://cdn.jsdelivr.net/npm/jspanel4@4.12.0/dist/extensions/dock/jspanel.dock', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@7.2.3/dist/gridstack-all', 'notyf': 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min'}, 'shim': {'jspanel': {'exports': 'jsPanel'}, 'gridstack': {'exports': 'GridStack'}}});
+      require(["jspanel"], function(jsPanel) {
+    window.jsPanel = jsPanel
+    on_load()
+      })
+      require(["jspanel-modal"], function() {
+    on_load()
+      })
+      require(["jspanel-tooltip"], function() {
+    on_load()
+      })
+      require(["jspanel-hint"], function() {
+    on_load()
+      })
+      require(["jspanel-layout"], function() {
+    on_load()
+      })
+      require(["jspanel-contextmenu"], function() {
+    on_load()
+      })
+      require(["jspanel-dock"], function() {
+    on_load()
+      })
+      require(["gridstack"], function(GridStack) {
+    window.GridStack = GridStack
+    on_load()
+      })
+      require(["notyf"], function() {
+    on_load()
+      })
+      root._bokeh_is_loading = css_urls.length + 9;
+    } else {
+      root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length + Object.keys(js_exports).length;
+    }
+
+    var existing_stylesheets = []
+    var links = document.getElementsByTagName('link')
+    for (var i = 0; i < links.length; i++) {
+      var link = links[i]
+      if (link.href != null) {
+    existing_stylesheets.push(link.href)
+      }
+    }
+    for (var i = 0; i < css_urls.length; i++) {
+      var url = css_urls[i];
+      if (existing_stylesheets.indexOf(url) !== -1) {
+    on_load()
+    continue;
+      }
+      const element = document.createElement("link");
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.rel = "stylesheet";
+      element.type = "text/css";
+      element.href = url;
+      console.debug("Bokeh: injecting link tag for BokehJS stylesheet: ", url);
+      document.body.appendChild(element);
+    }    if (((window['jsPanel'] !== undefined) && (!(window['jsPanel'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/1.2.1/dist/bundled/floatpanel/jspanel4@4.12.0/dist/jspanel.js', 'https://cdn.holoviz.org/panel/1.2.1/dist/bundled/floatpanel/jspanel4@4.12.0/dist/extensions/modal/jspanel.modal.js', 'https://cdn.holoviz.org/panel/1.2.1/dist/bundled/floatpanel/jspanel4@4.12.0/dist/extensions/tooltip/jspanel.tooltip.js', 'https://cdn.holoviz.org/panel/1.2.1/dist/bundled/floatpanel/jspanel4@4.12.0/dist/extensions/hint/jspanel.hint.js', 'https://cdn.holoviz.org/panel/1.2.1/dist/bundled/floatpanel/jspanel4@4.12.0/dist/extensions/layout/jspanel.layout.js', 'https://cdn.holoviz.org/panel/1.2.1/dist/bundled/floatpanel/jspanel4@4.12.0/dist/extensions/contextmenu/jspanel.contextmenu.js', 'https://cdn.holoviz.org/panel/1.2.1/dist/bundled/floatpanel/jspanel4@4.12.0/dist/extensions/dock/jspanel.dock.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/1.2.1/dist/bundled/gridstack/gridstack@7.2.3/dist/gridstack-all.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    if (((window['Notyf'] !== undefined) && (!(window['Notyf'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/1.2.1/dist/bundled/notificationarea/notyf@3/notyf.min.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    var existing_scripts = []
+    var scripts = document.getElementsByTagName('script')
+    for (var i = 0; i < scripts.length; i++) {
+      var script = scripts[i]
+      if (script.src != null) {
+    existing_scripts.push(script.src)
+      }
+    }
+    for (var i = 0; i < js_urls.length; i++) {
+      var url = js_urls[i];
+      if (skip.indexOf(url) !== -1 || existing_scripts.indexOf(url) !== -1) {
+    if (!window.requirejs) {
+      on_load();
+    }
+    continue;
+      }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    for (var i = 0; i < js_modules.length; i++) {
+      var url = js_modules[i];
+      if (skip.indexOf(url) !== -1 || existing_scripts.indexOf(url) !== -1) {
+    if (!window.requirejs) {
+      on_load();
+    }
+    continue;
+      }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    for (const name in js_exports) {
+      var url = js_exports[name];
+      if (skip.indexOf(url) >= 0 || root[name] != null) {
+    if (!window.requirejs) {
+      on_load();
+    }
+    continue;
+      }
+      var element = document.createElement('script');
+      element.onerror = on_error;
+      element.async = false;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      element.textContent = `
+      import ${name} from "${url}"
+      window.${name} = ${name}
+      window._bokeh_on_load()
+      `
+      document.head.appendChild(element);
+    }
+    if (!js_urls.length && !js_modules.length) {
+      on_load()
+    }
+  };
+
+  function inject_raw_css(css) {
+    const element = document.createElement("style");
+    element.appendChild(document.createTextNode(css));
+    document.body.appendChild(element);
+  }
+
+  var js_urls = ["https://cdn.bokeh.org/bokeh/release/bokeh-3.2.1.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-3.2.1.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.2.1.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.2.1.min.js", "https://cdn.holoviz.org/panel/1.2.1/dist/panel.min.js"];
+  var js_modules = [];
+  var js_exports = {};
+  var css_urls = [];
+  var inline_js = [    function(Bokeh) {
+      Bokeh.set_log_level("info");
+    },
+function(Bokeh) {} // ensure no trailing comma for IE
+  ];
+
+  function run_inline_js() {
+    if ((root.Bokeh !== undefined) || (force === true)) {
+      for (var i = 0; i < inline_js.length; i++) {
+        inline_js[i].call(root, root.Bokeh);
+      }
+      // Cache old bokeh versions
+      if (Bokeh != undefined && !reloading) {
+    var NewBokeh = root.Bokeh;
+    if (Bokeh.versions === undefined) {
+      Bokeh.versions = new Map();
+    }
+    if (NewBokeh.version !== Bokeh.version) {
+      Bokeh.versions.set(NewBokeh.version, NewBokeh)
+    }
+    root.Bokeh = Bokeh;
+      }} else if (Date.now() < root._bokeh_timeout) {
+      setTimeout(run_inline_js, 100);
+    } else if (!root._bokeh_failed_load) {
+      console.log("Bokeh: BokehJS failed to load within specified timeout.");
+      root._bokeh_failed_load = true;
+    }
+    root._bokeh_is_initializing = false
+  }
+
+  function load_or_wait() {
+    // Implement a backoff loop that tries to ensure we do not load multiple
+    // versions of Bokeh and its dependencies at the same time.
+    // In recent versions we use the root._bokeh_is_initializing flag
+    // to determine whether there is an ongoing attempt to initialize
+    // bokeh, however for backward compatibility we also try to ensure
+    // that we do not start loading a newer (Panel>=1.0 and Bokeh>3) version
+    // before older versions are fully initialized.
+    if (root._bokeh_is_initializing && Date.now() > root._bokeh_timeout) {
+      root._bokeh_is_initializing = false;
+      root._bokeh_onload_callbacks = undefined;
+      console.log("Bokeh: BokehJS was loaded multiple times but one version failed to initialize.");
+      load_or_wait();
+    } else if (root._bokeh_is_initializing || (typeof root._bokeh_is_initializing === "undefined" && root._bokeh_onload_callbacks !== undefined)) {
+      setTimeout(load_or_wait, 100);
+    } else {
+      Bokeh = root.Bokeh;
+      bokeh_loaded = Bokeh != null && (Bokeh.version === py_version || (Bokeh.versions !== undefined && Bokeh.versions.has(py_version)));
+      root._bokeh_is_initializing = true
+      root._bokeh_onload_callbacks = []
+      if (!reloading && (!bokeh_loaded || is_dev)) {
+    root.Bokeh = undefined;
+      }
+      load_libs(css_urls, js_urls, js_modules, js_exports, function() {
+    console.debug("Bokeh: BokehJS plotting callback run at", now());
+    run_inline_js();
+      });
+    }
+  }
+  // Give older versions of the autoload script a head-start to ensure
+  // they initialize before we start loading newer version.
+  setTimeout(load_or_wait, 100)
+}(window));
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<script type="application/javascript">
+
+if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
+  window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}
+}
+
+
+    function JupyterCommManager() {
+    }
+
+    JupyterCommManager.prototype.register_target = function(plot_id, comm_id, msg_handler) {
+      if (window.comm_manager || ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null))) {
+        var comm_manager = window.comm_manager || Jupyter.notebook.kernel.comm_manager;
+        comm_manager.register_target(comm_id, function(comm) {
+          comm.on_msg(msg_handler);
+        });
+      } else if ((plot_id in window.PyViz.kernels) && (window.PyViz.kernels[plot_id])) {
+        window.PyViz.kernels[plot_id].registerCommTarget(comm_id, function(comm) {
+          comm.onMsg = msg_handler;
+        });
+      } else if (typeof google != 'undefined' && google.colab.kernel != null) {
+        google.colab.kernel.comms.registerTarget(comm_id, (comm) => {
+          var messages = comm.messages[Symbol.asyncIterator]();
+          function processIteratorResult(result) {
+            var message = result.value;
+            console.log(message)
+            var content = {data: message.data, comm_id};
+            var buffers = []
+            for (var buffer of message.buffers || []) {
+              buffers.push(new DataView(buffer))
+            }
+            var metadata = message.metadata || {};
+            var msg = {content, buffers, metadata}
+            msg_handler(msg);
+            return messages.next().then(processIteratorResult);
+          }
+          return messages.next().then(processIteratorResult);
+        })
+      }
+    }
+
+    JupyterCommManager.prototype.get_client_comm = function(plot_id, comm_id, msg_handler) {
+      if (comm_id in window.PyViz.comms) {
+        return window.PyViz.comms[comm_id];
+      } else if (window.comm_manager || ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null))) {
+        var comm_manager = window.comm_manager || Jupyter.notebook.kernel.comm_manager;
+        var comm = comm_manager.new_comm(comm_id, {}, {}, {}, comm_id);
+        if (msg_handler) {
+          comm.on_msg(msg_handler);
+        }
+      } else if ((plot_id in window.PyViz.kernels) && (window.PyViz.kernels[plot_id])) {
+        var comm = window.PyViz.kernels[plot_id].connectToComm(comm_id);
+        comm.open();
+        if (msg_handler) {
+          comm.onMsg = msg_handler;
+        }
+      } else if (typeof google != 'undefined' && google.colab.kernel != null) {
+        var comm_promise = google.colab.kernel.comms.open(comm_id)
+        comm_promise.then((comm) => {
+          window.PyViz.comms[comm_id] = comm;
+          if (msg_handler) {
+            var messages = comm.messages[Symbol.asyncIterator]();
+            function processIteratorResult(result) {
+              var message = result.value;
+              var content = {data: message.data};
+              var metadata = message.metadata || {comm_id};
+              var msg = {content, metadata}
+              msg_handler(msg);
+              return messages.next().then(processIteratorResult);
+            }
+            return messages.next().then(processIteratorResult);
+          }
+        }) 
+        var sendClosure = (data, metadata, buffers, disposeOnDone) => {
+          return comm_promise.then((comm) => {
+            comm.send(data, metadata, buffers, disposeOnDone);
+          });
+        };
+        var comm = {
+          send: sendClosure
+        };
+      }
+      window.PyViz.comms[comm_id] = comm;
+      return comm;
+    }
+    window.PyViz.comm_manager = new JupyterCommManager();
+    
+
+
+var JS_MIME_TYPE = 'application/javascript';
+var HTML_MIME_TYPE = 'text/html';
+var EXEC_MIME_TYPE = 'application/vnd.holoviews_exec.v0+json';
+var CLASS_NAME = 'output';
+
+/**
+ * Render data to the DOM node
+ */
+function render(props, node) {
+  var div = document.createElement("div");
+  var script = document.createElement("script");
+  node.appendChild(div);
+  node.appendChild(script);
+}
+
+/**
+ * Handle when a new output is added
+ */
+function handle_add_output(event, handle) {
+  var output_area = handle.output_area;
+  var output = handle.output;
+  if ((output.data == undefined) || (!output.data.hasOwnProperty(EXEC_MIME_TYPE))) {
+    return
+  }
+  var id = output.metadata[EXEC_MIME_TYPE]["id"];
+  var toinsert = output_area.element.find("." + CLASS_NAME.split(' ')[0]);
+  if (id !== undefined) {
+    var nchildren = toinsert.length;
+    var html_node = toinsert[nchildren-1].children[0];
+    html_node.innerHTML = output.data[HTML_MIME_TYPE];
+    var scripts = [];
+    var nodelist = html_node.querySelectorAll("script");
+    for (var i in nodelist) {
+      if (nodelist.hasOwnProperty(i)) {
+        scripts.push(nodelist[i])
+      }
+    }
+
+    scripts.forEach( function (oldScript) {
+      var newScript = document.createElement("script");
+      var attrs = [];
+      var nodemap = oldScript.attributes;
+      for (var j in nodemap) {
+        if (nodemap.hasOwnProperty(j)) {
+          attrs.push(nodemap[j])
+        }
+      }
+      attrs.forEach(function(attr) { newScript.setAttribute(attr.name, attr.value) });
+      newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+      oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+    if (JS_MIME_TYPE in output.data) {
+      toinsert[nchildren-1].children[1].textContent = output.data[JS_MIME_TYPE];
+    }
+    output_area._hv_plot_id = id;
+    if ((window.Bokeh !== undefined) && (id in Bokeh.index)) {
+      window.PyViz.plot_index[id] = Bokeh.index[id];
+    } else {
+      window.PyViz.plot_index[id] = null;
+    }
+  } else if (output.metadata[EXEC_MIME_TYPE]["server_id"] !== undefined) {
+    var bk_div = document.createElement("div");
+    bk_div.innerHTML = output.data[HTML_MIME_TYPE];
+    var script_attrs = bk_div.children[0].attributes;
+    for (var i = 0; i < script_attrs.length; i++) {
+      toinsert[toinsert.length - 1].childNodes[1].setAttribute(script_attrs[i].name, script_attrs[i].value);
+    }
+    // store reference to server id on output_area
+    output_area._bokeh_server_id = output.metadata[EXEC_MIME_TYPE]["server_id"];
+  }
+}
+
+/**
+ * Handle when an output is cleared or removed
+ */
+function handle_clear_output(event, handle) {
+  var id = handle.cell.output_area._hv_plot_id;
+  var server_id = handle.cell.output_area._bokeh_server_id;
+  if (((id === undefined) || !(id in PyViz.plot_index)) && (server_id !== undefined)) { return; }
+  var comm = window.PyViz.comm_manager.get_client_comm("hv-extension-comm", "hv-extension-comm", function () {});
+  if (server_id !== null) {
+    comm.send({event_type: 'server_delete', 'id': server_id});
+    return;
+  } else if (comm !== null) {
+    comm.send({event_type: 'delete', 'id': id});
+  }
+  delete PyViz.plot_index[id];
+  if ((window.Bokeh !== undefined) & (id in window.Bokeh.index)) {
+    var doc = window.Bokeh.index[id].model.document
+    doc.clear();
+    const i = window.Bokeh.documents.indexOf(doc);
+    if (i > -1) {
+      window.Bokeh.documents.splice(i, 1);
+    }
+  }
+}
+
+/**
+ * Handle kernel restart event
+ */
+function handle_kernel_cleanup(event, handle) {
+  delete PyViz.comms["hv-extension-comm"];
+  window.PyViz.plot_index = {}
+}
+
+/**
+ * Handle update_display_data messages
+ */
+function handle_update_output(event, handle) {
+  handle_clear_output(event, {cell: {output_area: handle.output_area}})
+  handle_add_output(event, handle)
+}
+
+function register_renderer(events, OutputArea) {
+  function append_mime(data, metadata, element) {
+    // create a DOM node to render to
+    var toinsert = this.create_output_subarea(
+    metadata,
+    CLASS_NAME,
+    EXEC_MIME_TYPE
+    );
+    this.keyboard_manager.register_events(toinsert);
+    // Render to node
+    var props = {data: data, metadata: metadata[EXEC_MIME_TYPE]};
+    render(props, toinsert[0]);
+    element.append(toinsert);
+    return toinsert
+  }
+
+  events.on('output_added.OutputArea', handle_add_output);
+  events.on('output_updated.OutputArea', handle_update_output);
+  events.on('clear_output.CodeCell', handle_clear_output);
+  events.on('delete.Cell', handle_clear_output);
+  events.on('kernel_ready.Kernel', handle_kernel_cleanup);
+
+  OutputArea.prototype.register_mime_type(EXEC_MIME_TYPE, append_mime, {
+    safe: true,
+    index: 0
+  });
+}
+
+if (window.Jupyter !== undefined) {
+  try {
+    var events = require('base/js/events');
+    var OutputArea = require('notebook/js/outputarea').OutputArea;
+    if (OutputArea.prototype.mime_types().indexOf(EXEC_MIME_TYPE) == -1) {
+      register_renderer(events, OutputArea);
+    }
+  } catch(err) {
+  }
+}
+
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<style>*[data-root-id],
+*[data-root-id] > * {
+  box-sizing: border-box;
+  font-family: var(--jp-ui-font-family);
+  font-size: var(--jp-ui-font-size1);
+  color: var(--vscode-editor-foreground, var(--jp-ui-font-color1));
+}
+
+/* Override VSCode background color */
+.cell-output-ipywidget-background:has(
+    > .cell-output-ipywidget-background > .lm-Widget > *[data-root-id]
+  ),
+.cell-output-ipywidget-background:has(> .lm-Widget > *[data-root-id]) {
+  background-color: transparent !important;
+}
+</style>
+</div>
+</div>
+<section id="housing-sales-data" class="level2">
+<h2 class="anchored" data-anchor-id="housing-sales-data">1. HOUSING SALES DATA</h2>
+<p>Internal Characteristic of the House from data of <a href="https://opendataphilly.org/datasets/philadelphia-properties-and-assessment-history/">Philadelphia Properties and Current Assessments</a></p>
+<div class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;slide&quot;}" data-tags="[]" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">geometry</th>
+<th data-quarto-table-cell-role="th">cartodb_id</th>
+<th data-quarto-table-cell-role="th">assessment_date</th>
+<th data-quarto-table-cell-role="th">basements</th>
+<th data-quarto-table-cell-role="th">beginning_point</th>
+<th data-quarto-table-cell-role="th">book_and_page</th>
+<th data-quarto-table-cell-role="th">building_code</th>
+<th data-quarto-table-cell-role="th">building_code_description</th>
+<th data-quarto-table-cell-role="th">category_code</th>
+<th data-quarto-table-cell-role="th">category_code_description</th>
+<th data-quarto-table-cell-role="th">census_tract</th>
+<th data-quarto-table-cell-role="th">central_air</th>
+<th data-quarto-table-cell-role="th">cross_reference</th>
+<th data-quarto-table-cell-role="th">date_exterior_condition</th>
+<th data-quarto-table-cell-role="th">depth</th>
+<th data-quarto-table-cell-role="th">exempt_building</th>
+<th data-quarto-table-cell-role="th">exempt_land</th>
+<th data-quarto-table-cell-role="th">exterior_condition</th>
+<th data-quarto-table-cell-role="th">fireplaces</th>
+<th data-quarto-table-cell-role="th">frontage</th>
+<th data-quarto-table-cell-role="th">fuel</th>
+<th data-quarto-table-cell-role="th">garage_spaces</th>
+<th data-quarto-table-cell-role="th">garage_type</th>
+<th data-quarto-table-cell-role="th">general_construction</th>
+<th data-quarto-table-cell-role="th">geographic_ward</th>
+<th data-quarto-table-cell-role="th">homestead_exemption</th>
+<th data-quarto-table-cell-role="th">house_extension</th>
+<th data-quarto-table-cell-role="th">house_number</th>
+<th data-quarto-table-cell-role="th">interior_condition</th>
+<th data-quarto-table-cell-role="th">location</th>
+<th data-quarto-table-cell-role="th">mailing_address_1</th>
+<th data-quarto-table-cell-role="th">mailing_address_2</th>
+<th data-quarto-table-cell-role="th">mailing_care_of</th>
+<th data-quarto-table-cell-role="th">mailing_city_state</th>
+<th data-quarto-table-cell-role="th">mailing_street</th>
+<th data-quarto-table-cell-role="th">mailing_zip</th>
+<th data-quarto-table-cell-role="th">market_value</th>
+<th data-quarto-table-cell-role="th">market_value_date</th>
+<th data-quarto-table-cell-role="th">number_of_bathrooms</th>
+<th data-quarto-table-cell-role="th">number_of_bedrooms</th>
+<th data-quarto-table-cell-role="th">number_of_rooms</th>
+<th data-quarto-table-cell-role="th">number_stories</th>
+<th data-quarto-table-cell-role="th">off_street_open</th>
+<th data-quarto-table-cell-role="th">other_building</th>
+<th data-quarto-table-cell-role="th">owner_1</th>
+<th data-quarto-table-cell-role="th">owner_2</th>
+<th data-quarto-table-cell-role="th">parcel_number</th>
+<th data-quarto-table-cell-role="th">parcel_shape</th>
+<th data-quarto-table-cell-role="th">quality_grade</th>
+<th data-quarto-table-cell-role="th">recording_date</th>
+<th data-quarto-table-cell-role="th">registry_number</th>
+<th data-quarto-table-cell-role="th">sale_date</th>
+<th data-quarto-table-cell-role="th">sale_price</th>
+<th data-quarto-table-cell-role="th">separate_utilities</th>
+<th data-quarto-table-cell-role="th">sewer</th>
+<th data-quarto-table-cell-role="th">site_type</th>
+<th data-quarto-table-cell-role="th">state_code</th>
+<th data-quarto-table-cell-role="th">street_code</th>
+<th data-quarto-table-cell-role="th">street_designation</th>
+<th data-quarto-table-cell-role="th">street_direction</th>
+<th data-quarto-table-cell-role="th">street_name</th>
+<th data-quarto-table-cell-role="th">suffix</th>
+<th data-quarto-table-cell-role="th">taxable_building</th>
+<th data-quarto-table-cell-role="th">taxable_land</th>
+<th data-quarto-table-cell-role="th">topography</th>
+<th data-quarto-table-cell-role="th">total_area</th>
+<th data-quarto-table-cell-role="th">total_livable_area</th>
+<th data-quarto-table-cell-role="th">type_heater</th>
+<th data-quarto-table-cell-role="th">unfinished</th>
+<th data-quarto-table-cell-role="th">unit</th>
+<th data-quarto-table-cell-role="th">utility</th>
+<th data-quarto-table-cell-role="th">view_type</th>
+<th data-quarto-table-cell-role="th">year_built</th>
+<th data-quarto-table-cell-role="th">year_built_estimate</th>
+<th data-quarto-table-cell-role="th">zip_code</th>
+<th data-quarto-table-cell-role="th">zoning</th>
+<th data-quarto-table-cell-role="th">pin</th>
+<th data-quarto-table-cell-role="th">building_code_new</th>
+<th data-quarto-table-cell-role="th">building_code_description_new</th>
+<th data-quarto-table-cell-role="th">objectid</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1071</td>
+<td>POINT (-75.14860 39.93145)</td>
+<td>18033</td>
+<td>2022-05-24T00:00:00Z</td>
+<td>0</td>
+<td>36'6" E OF AMERICAN</td>
+<td>54131081</td>
+<td>R30</td>
+<td>ROW B/GAR 2 STY MASONRY</td>
+<td>1</td>
+<td>SINGLE FAMILY</td>
+<td>27</td>
+<td>Y</td>
+<td>None</td>
+<td>None</td>
+<td>90.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4</td>
+<td>0.0</td>
+<td>18.0</td>
+<td>None</td>
+<td>1.0</td>
+<td>None</td>
+<td>A</td>
+<td>1</td>
+<td>0</td>
+<td>None</td>
+<td>224</td>
+<td>4</td>
+<td>224 WHARTON ST</td>
+<td>SIMPLIFILE LC E-RECORDING</td>
+<td>None</td>
+<td>None</td>
+<td>PHILADELPHIA PA</td>
+<td>224 WHARTON ST</td>
+<td>19147-5336</td>
+<td>327600</td>
+<td>None</td>
+<td>2.0</td>
+<td>3.0</td>
+<td>NaN</td>
+<td>3.0</td>
+<td>711.0</td>
+<td>None</td>
+<td>DEVER CATHERINE JOAN</td>
+<td>None</td>
+<td>011001670</td>
+<td>E</td>
+<td>C</td>
+<td>2022-12-14T00:00:00Z</td>
+<td>9S17 307</td>
+<td>2022-12-05T00:00:00Z</td>
+<td>450000</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>PA</td>
+<td>82740</td>
+<td>ST</td>
+<td>None</td>
+<td>WHARTON</td>
+<td>None</td>
+<td>262080.0</td>
+<td>65520.0</td>
+<td>F</td>
+<td>1625.0</td>
+<td>1785.0</td>
+<td>A</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>I</td>
+<td>1960</td>
+<td>Y</td>
+<td>19147</td>
+<td>RSA5</td>
+<td>1001563093</td>
+<td>26</td>
+<td>ROW RIVER ROW</td>
+<td>408100382</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13220</td>
+<td>POINT (-75.14817 39.93101)</td>
+<td>33630</td>
+<td>2022-05-24T00:00:00Z</td>
+<td>A</td>
+<td>50' W SIDE OF 2ND ST</td>
+<td>54063610</td>
+<td>O50</td>
+<td>ROW 3 STY MASONRY</td>
+<td>1</td>
+<td>SINGLE FAMILY</td>
+<td>27</td>
+<td>Y</td>
+<td>None</td>
+<td>None</td>
+<td>36.0</td>
+<td>80000.0</td>
+<td>0.0</td>
+<td>3</td>
+<td>0.0</td>
+<td>34.0</td>
+<td>A</td>
+<td>0.0</td>
+<td>None</td>
+<td>A</td>
+<td>1</td>
+<td>80000</td>
+<td>None</td>
+<td>205</td>
+<td>3</td>
+<td>205 EARP ST</td>
+<td>SIMPLIFILE LC E-RECORDING</td>
+<td>None</td>
+<td>None</td>
+<td>PHILADELPHIA PA</td>
+<td>205 EARP ST</td>
+<td>19147-6035</td>
+<td>434400</td>
+<td>None</td>
+<td>3.0</td>
+<td>4.0</td>
+<td>NaN</td>
+<td>3.0</td>
+<td>467.0</td>
+<td>None</td>
+<td>MORAN KELLY</td>
+<td>TRENTALANGE SILVIO</td>
+<td>011004720</td>
+<td>E</td>
+<td>C+</td>
+<td>2022-06-30T00:00:00Z</td>
+<td>009S170369</td>
+<td>2022-06-24T00:00:00Z</td>
+<td>670000</td>
+<td>A</td>
+<td>None</td>
+<td>None</td>
+<td>PA</td>
+<td>30420</td>
+<td>ST</td>
+<td>None</td>
+<td>EARP</td>
+<td>None</td>
+<td>267520.0</td>
+<td>86880.0</td>
+<td>F</td>
+<td>1224.0</td>
+<td>2244.0</td>
+<td>A</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>I</td>
+<td>2009</td>
+<td>None</td>
+<td>19147</td>
+<td>RSA5</td>
+<td>1001190209</td>
+<td>22</td>
+<td>ROW TYPICAL</td>
+<td>408113583</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8348</td>
+<td>POINT (-75.14781 39.93010)</td>
+<td>27578</td>
+<td>2022-05-24T00:00:00Z</td>
+<td>A</td>
+<td>33.333 S OF REED</td>
+<td>54085418</td>
+<td>P51</td>
+<td>ROW W/GAR 3 STY MAS+OTHER</td>
+<td>1</td>
+<td>SINGLE FAMILY</td>
+<td>27</td>
+<td>Y</td>
+<td>None</td>
+<td>None</td>
+<td>84.0</td>
+<td>574320.0</td>
+<td>0.0</td>
+<td>1</td>
+<td>0.0</td>
+<td>17.0</td>
+<td>A</td>
+<td>1.0</td>
+<td>None</td>
+<td>C</td>
+<td>1</td>
+<td>0</td>
+<td>None</td>
+<td>136</td>
+<td>1</td>
+<td>136 REED ST</td>
+<td>SIMPLIFILE LC E-RECORDING</td>
+<td>None</td>
+<td>None</td>
+<td>PHILADELPHIA PA</td>
+<td>136 REED ST</td>
+<td>19147-6117</td>
+<td>717900</td>
+<td>None</td>
+<td>0.0</td>
+<td>3.0</td>
+<td>NaN</td>
+<td>2.0</td>
+<td>296.0</td>
+<td>None</td>
+<td>DOLIN CARLY P</td>
+<td>DOLIN RYAN N</td>
+<td>011011410</td>
+<td>E</td>
+<td>C+</td>
+<td>2022-08-16T00:00:00Z</td>
+<td>010S110342</td>
+<td>2022-08-09T00:00:00Z</td>
+<td>790000</td>
+<td>None</td>
+<td>Y</td>
+<td>None</td>
+<td>PA</td>
+<td>67780</td>
+<td>ST</td>
+<td>None</td>
+<td>REED</td>
+<td>None</td>
+<td>0.0</td>
+<td>143580.0</td>
+<td>F</td>
+<td>1400.0</td>
+<td>2514.0</td>
+<td>A</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>I</td>
+<td>2014</td>
+<td>None</td>
+<td>19147</td>
+<td>ICMX</td>
+<td>1001442221</td>
+<td>25</td>
+<td>ROW MODERN</td>
+<td>408108984</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1179</td>
+<td>POINT (-75.14887 39.93026)</td>
+<td>18296</td>
+<td>2022-05-24T00:00:00Z</td>
+<td>D</td>
+<td>68 FT W PHILIP ST</td>
+<td>54127951</td>
+<td>O50</td>
+<td>ROW 3 STY MASONRY</td>
+<td>1</td>
+<td>SINGLE FAMILY</td>
+<td>27</td>
+<td>Y</td>
+<td>None</td>
+<td>None</td>
+<td>60.0</td>
+<td>180200.0</td>
+<td>0.0</td>
+<td>4</td>
+<td>0.0</td>
+<td>14.0</td>
+<td>None</td>
+<td>0.0</td>
+<td>None</td>
+<td>A</td>
+<td>1</td>
+<td>0</td>
+<td>None</td>
+<td>220</td>
+<td>4</td>
+<td>220 REED ST</td>
+<td>OLKOWSKI KEITH</td>
+<td>None</td>
+<td>None</td>
+<td>PHILADELPHIA PA</td>
+<td>243 GREENWICH STREET</td>
+<td>19147</td>
+<td>293000</td>
+<td>None</td>
+<td>2.0</td>
+<td>3.0</td>
+<td>NaN</td>
+<td>3.0</td>
+<td>193.0</td>
+<td>None</td>
+<td>OLKOWSKI KEITH</td>
+<td>RACHUBINSKI MICHAEL</td>
+<td>011012200</td>
+<td>E</td>
+<td>C</td>
+<td>2022-12-06T00:00:00Z</td>
+<td>010S110109</td>
+<td>2022-12-02T00:00:00Z</td>
+<td>195000</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>PA</td>
+<td>67780</td>
+<td>ST</td>
+<td>None</td>
+<td>REED</td>
+<td>None</td>
+<td>54200.0</td>
+<td>58600.0</td>
+<td>F</td>
+<td>840.0</td>
+<td>1358.0</td>
+<td>H</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>I</td>
+<td>1920</td>
+<td>Y</td>
+<td>19147</td>
+<td>RSA5</td>
+<td>1001442236</td>
+<td>22</td>
+<td>ROW TYPICAL</td>
+<td>408100883</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">13192</td>
+<td>POINT (-75.14881 39.93012)</td>
+<td>33595</td>
+<td>2022-05-24T00:00:00Z</td>
+<td>C</td>
+<td>42 FT W PHILIP</td>
+<td>54063384</td>
+<td>O30</td>
+<td>ROW 2 STY MASONRY</td>
+<td>1</td>
+<td>SINGLE FAMILY</td>
+<td>27</td>
+<td>Y</td>
+<td>None</td>
+<td>None</td>
+<td>39.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4</td>
+<td>0.0</td>
+<td>14.0</td>
+<td>None</td>
+<td>0.0</td>
+<td>None</td>
+<td>A</td>
+<td>1</td>
+<td>0</td>
+<td>None</td>
+<td>207</td>
+<td>3</td>
+<td>207 GERRITT ST</td>
+<td>SIMPLIFILE LC E-RECORDING</td>
+<td>None</td>
+<td>None</td>
+<td>PHILADELPHIA PA</td>
+<td>207 GERRITT ST</td>
+<td>19147-6012</td>
+<td>255500</td>
+<td>None</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>NaN</td>
+<td>2.0</td>
+<td>141.0</td>
+<td>None</td>
+<td>NETTER DANIEL ANTHONY</td>
+<td>NETTER SARAH ANNE</td>
+<td>011014000</td>
+<td>E</td>
+<td>C</td>
+<td>2022-06-29T00:00:00Z</td>
+<td>010S110172</td>
+<td>2022-06-27T00:00:00Z</td>
+<td>331000</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>PA</td>
+<td>36680</td>
+<td>ST</td>
+<td>None</td>
+<td>GERRITT</td>
+<td>None</td>
+<td>204400.0</td>
+<td>51100.0</td>
+<td>F</td>
+<td>546.0</td>
+<td>868.0</td>
+<td>H</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>I</td>
+<td>1920</td>
+<td>Y</td>
+<td>19147</td>
+<td>RSA5</td>
+<td>1001238775</td>
+<td>22</td>
+<td>ROW TYPICAL</td>
+<td>408113799</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="feature-from-sales-data-we-will-work-with" class="level2">
+<h2 class="anchored" data-anchor-id="feature-from-sales-data-we-will-work-with">Feature from sales data we will work with:</h2>
+<ul>
+<li>Sale Price</li>
+<li>Total Livable Area</li>
+<li>Total Area</li>
+<li>Garage Spaces</li>
+<li>Fireplace</li>
+<li>Frontage</li>
+<li>Number of Bathrooms</li>
+<li>Number of Bedrooms</li>
+<li>Number of Stories</li>
+<li>Exterior Condition</li>
+<li>Interior Condition</li>
+<li>Zip Code</li>
+<li>Garage Type</li>
+<li>Zoning</li>
+</ul>
+</section>
+<section id="feature-1-311-graffiti-calls" class="level2">
+<h2 class="anchored" data-anchor-id="feature-1-311-graffiti-calls">2. FEATURE 1: 311 GRAFFITI CALLS</h2>
+<p>Source: <a href="https://www.opendataphilly.org/dataset/311-service-and-information-requests">https://www.opendataphilly.org/dataset/311-service-and-information-requests</a></p>
+<p><a href="https://metadata.phila.gov/#home/datasetdetails/5543864d20583086178c4e98/representationdetails/5762e19fa237544b2ecfe722/">Metadata</a></p>
+<div class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;slide&quot;}" data-tags="[]" data-execution_count="40">
+<div class="cell-output cell-output-display" data-execution_count="40">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">geometry</th>
+<th data-quarto-table-cell-role="th">cartodb_id</th>
+<th data-quarto-table-cell-role="th">objectid</th>
+<th data-quarto-table-cell-role="th">service_request_id</th>
+<th data-quarto-table-cell-role="th">subject</th>
+<th data-quarto-table-cell-role="th">status</th>
+<th data-quarto-table-cell-role="th">status_notes</th>
+<th data-quarto-table-cell-role="th">service_name</th>
+<th data-quarto-table-cell-role="th">service_code</th>
+<th data-quarto-table-cell-role="th">agency_responsible</th>
+<th data-quarto-table-cell-role="th">service_notice</th>
+<th data-quarto-table-cell-role="th">requested_datetime</th>
+<th data-quarto-table-cell-role="th">updated_datetime</th>
+<th data-quarto-table-cell-role="th">expected_datetime</th>
+<th data-quarto-table-cell-role="th">closed_datetime</th>
+<th data-quarto-table-cell-role="th">address</th>
+<th data-quarto-table-cell-role="th">zipcode</th>
+<th data-quarto-table-cell-role="th">media_url</th>
+<th data-quarto-table-cell-role="th">lat</th>
+<th data-quarto-table-cell-role="th">lon</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>POINT (-75.08690 40.01072)</td>
+<td>124</td>
+<td>23123130</td>
+<td>14779871</td>
+<td>Graffiti Removal</td>
+<td>Closed</td>
+<td>Issue Resolved</td>
+<td>Graffiti Removal</td>
+<td>SR-CL01</td>
+<td>Community Life Improvement Program</td>
+<td>7 Business Days</td>
+<td>2022-03-07T13:46:57Z</td>
+<td>2023-02-15T22:01:20Z</td>
+<td>2022-03-16T20:00:00Z</td>
+<td>2022-03-11T10:48:00Z</td>
+<td>4301-29 PAUL ST</td>
+<td>19124</td>
+<td>None</td>
+<td>40.010720</td>
+<td>-75.086897</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>POINT (-75.16784 39.93091)</td>
+<td>125</td>
+<td>23205514</td>
+<td>14882961</td>
+<td>Graffiti Removal</td>
+<td>Closed</td>
+<td>Other</td>
+<td>Graffiti Removal</td>
+<td>SR-CL01</td>
+<td>Community Life Improvement Program</td>
+<td>7 Business Days</td>
+<td>2022-04-22T15:44:26Z</td>
+<td>2022-05-03T08:00:11Z</td>
+<td>2022-05-03T20:00:00Z</td>
+<td>2022-04-26T13:53:30Z</td>
+<td>1527 S BROAD ST</td>
+<td>19147</td>
+<td>https://d17aqltn7cihbm.cloudfront.net/uploads/...</td>
+<td>39.930912</td>
+<td>-75.167842</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>POINT (-75.21926 39.95372)</td>
+<td>248</td>
+<td>23205508</td>
+<td>14883241</td>
+<td>Graffiti Removal</td>
+<td>Closed</td>
+<td>Issue Resolved</td>
+<td>Graffiti Removal</td>
+<td>SR-CL01</td>
+<td>Community Life Improvement Program</td>
+<td>7 Business Days</td>
+<td>2022-04-22T17:30:03Z</td>
+<td>2022-05-04T10:08:37Z</td>
+<td>2022-05-03T20:00:00Z</td>
+<td>2022-05-04T10:08:35Z</td>
+<td>4832 SPRUCE ST</td>
+<td>19139</td>
+<td>https://d17aqltn7cihbm.cloudfront.net/uploads/...</td>
+<td>39.953722</td>
+<td>-75.219259</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>POINT (-75.14260 39.97323)</td>
+<td>668</td>
+<td>23205579</td>
+<td>14882570</td>
+<td>Graffiti Removal</td>
+<td>Closed</td>
+<td>Issue Resolved</td>
+<td>Graffiti Removal</td>
+<td>SR-CL01</td>
+<td>Community Life Improvement Program</td>
+<td>7 Business Days</td>
+<td>2022-04-22T14:14:02Z</td>
+<td>2022-04-29T11:18:39Z</td>
+<td>2022-05-03T20:00:00Z</td>
+<td>2022-04-29T11:18:38Z</td>
+<td>1432 N 4TH ST</td>
+<td>19122</td>
+<td>https://d17aqltn7cihbm.cloudfront.net/uploads/...</td>
+<td>39.973229</td>
+<td>-75.142603</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>POINT (-75.16772 40.00350)</td>
+<td>843</td>
+<td>23123114</td>
+<td>14780160</td>
+<td>Graffiti Removal</td>
+<td>Closed</td>
+<td>Issue Resolved</td>
+<td>Graffiti Removal</td>
+<td>SR-CL01</td>
+<td>Community Life Improvement Program</td>
+<td>7 Business Days</td>
+<td>2022-03-07T14:43:46Z</td>
+<td>2023-02-15T22:00:12Z</td>
+<td>2022-03-16T20:00:00Z</td>
+<td>2022-03-10T09:46:48Z</td>
+<td>2306 W ALLEGHENY AVE</td>
+<td>19132</td>
+<td>https://d17aqltn7cihbm.cloudfront.net/uploads/...</td>
+<td>40.003501</td>
+<td>-75.167723</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<section id="hex-map-of-the-311-graffiti-calls" class="level4">
+<h4 class="anchored" data-anchor-id="hex-map-of-the-311-graffiti-calls">Hex map of the 311 Graffiti Calls</h4>
+<div class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;slide&quot;}" data-tags="[]" data-execution_count="72">
+<div class="cell-output cell-output-display">
+<p><img src="Data Wrangling_files/figure-html/cell-43-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="feature-2-subway-stops" class="level2">
+<h2 class="anchored" data-anchor-id="feature-2-subway-stops">3. FEATURE 2: SUBWAY STOPS</h2>
+<p>Source: <a href="https://wiki.openstreetmap.org/wiki/Tag:station%3Dsubway">OSM Wikipedia</a></p>
+<div class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;slide&quot;}" data-tags="[]" data-execution_count="77">
+<div class="cell-output cell-output-display" data-execution_count="77">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">addr:city</th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">network</th>
+<th data-quarto-table-cell-role="th">operator</th>
+<th data-quarto-table-cell-role="th">platforms</th>
+<th data-quarto-table-cell-role="th">public_transport</th>
+<th data-quarto-table-cell-role="th">railway</th>
+<th data-quarto-table-cell-role="th">station</th>
+<th data-quarto-table-cell-role="th">subway</th>
+<th data-quarto-table-cell-role="th">wheelchair</th>
+<th data-quarto-table-cell-role="th">wikidata</th>
+<th data-quarto-table-cell-role="th">wikipedia</th>
+<th data-quarto-table-cell-role="th">geometry</th>
+<th data-quarto-table-cell-role="th">addr:postcode</th>
+<th data-quarto-table-cell-role="th">operator_1</th>
+<th data-quarto-table-cell-role="th">addr:housenumber</th>
+<th data-quarto-table-cell-role="th">addr:street</th>
+<th data-quarto-table-cell-role="th">railway:position</th>
+<th data-quarto-table-cell-role="th">internet_access</th>
+<th data-quarto-table-cell-role="th">name:en</th>
+<th data-quarto-table-cell-role="th">old_name</th>
+<th data-quarto-table-cell-role="th">addr:state</th>
+<th data-quarto-table-cell-role="th">short_name</th>
+<th data-quarto-table-cell-role="th">network:wikidata</th>
+<th data-quarto-table-cell-role="th">train</th>
+<th data-quarto-table-cell-role="th">operator:wikidata</th>
+<th data-quarto-table-cell-role="th">elevator</th>
+<th data-quarto-table-cell-role="th">tram</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">element_type</th>
+<th data-quarto-table-cell-role="th">osmid</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td rowspan="5" data-quarto-table-cell-role="th" data-valign="top">node</td>
+<td data-quarto-table-cell-role="th">469917297</td>
+<td>Philadelphia</td>
+<td>15th-16th &amp; Locust</td>
+<td>PATCO</td>
+<td>PATCO</td>
+<td>1</td>
+<td>station</td>
+<td>station</td>
+<td>subway</td>
+<td>yes</td>
+<td>yes</td>
+<td>Q4551078</td>
+<td>en:15–16th &amp; Locust (PATCO station)</td>
+<td>POINT (-8367552.610 4858465.747)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">469917298</td>
+<td>Philadelphia</td>
+<td>9th-10th &amp; Locust</td>
+<td>PATCO</td>
+<td>PATCO</td>
+<td>1</td>
+<td>station</td>
+<td>station</td>
+<td>subway</td>
+<td>yes</td>
+<td>yes</td>
+<td>Q4646737</td>
+<td>en:9–10th &amp; Locust (PATCO station)</td>
+<td>POINT (-8366424.042 4858281.683)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">471026103</td>
+<td>Philadelphia</td>
+<td>12th-13th &amp; Locust</td>
+<td>PATCO</td>
+<td>PATCO</td>
+<td>1</td>
+<td>station</td>
+<td>station</td>
+<td>subway</td>
+<td>yes</td>
+<td>no</td>
+<td>Q4548965</td>
+<td>en:12–13th &amp; Locust (PATCO station)</td>
+<td>POINT (-8366949.703 4858366.817)</td>
+<td>19107</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">650938316</td>
+<td>NaN</td>
+<td>63rd Street</td>
+<td>SEPTA</td>
+<td>SEPTA</td>
+<td>NaN</td>
+<td>station</td>
+<td>station</td>
+<td>subway</td>
+<td>yes</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>POINT (-8376424.717 4860524.238)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">650959043</td>
+<td>NaN</td>
+<td>56th Street</td>
+<td>SEPTA</td>
+<td>SEPTA</td>
+<td>NaN</td>
+<td>station</td>
+<td>station</td>
+<td>subway</td>
+<td>yes</td>
+<td>NaN</td>
+<td>Q4640769</td>
+<td>NaN</td>
+<td>POINT (-8374883.844 4860274.795)</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<section id="two-main-septa-line-stop" class="level4">
+<h4 class="anchored" data-anchor-id="two-main-septa-line-stop">Two Main SEPTA Line Stop</h4>
+<div class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;slide&quot;}" data-tags="[]" data-execution_count="78">
+<div class="cell-output cell-output-display">
+<p><img src="Data Wrangling_files/figure-html/cell-48-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="hex-map-of-the-subway-stop" class="level4">
+<h4 class="anchored" data-anchor-id="hex-map-of-the-subway-stop">Hex map of the Subway Stop</h4>
+<div class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;slide&quot;}" data-tags="[]" data-execution_count="85">
+<div class="cell-output cell-output-display">
+<p><img src="Data Wrangling_files/figure-html/cell-50-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="feature-3-distance-to-universities" class="level2">
+<h2 class="anchored" data-anchor-id="feature-3-distance-to-universities">4. FEATURE 3: DISTANCE TO UNIVERSITIES</h2>
+<ul>
+<li>Source: <a href="https://www.opendataphilly.org/dataset/philadelphia-universities-and-colleges">OpenDataPhilly</a></li>
+<li><a href="https://opendata.arcgis.com/api/v3/datasets/8ad76bc179cf44bd9b1c23d6f66f57d1_0/downloads/data?format=geojson&amp;spatialRefId=4326">GeoJSON URL</a></li>
+</ul>
+<section id="hex-map-of-the-distance-to-nearest-universitycollege" class="level4">
+<h4 class="anchored" data-anchor-id="hex-map-of-the-distance-to-nearest-universitycollege">Hex map of the distance to nearest University/College</h4>
+<div class="cell" data-tags="[]" data-execution_count="88">
+<div class="cell-output cell-output-display">
+<p><img src="Data Wrangling_files/figure-html/cell-53-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="feature-4-distance-to-park" class="level2">
+<h2 class="anchored" data-anchor-id="feature-4-distance-to-park">5. FEATURE 4: DISTANCE TO PARK</h2>
+<ul>
+<li>Source: <a href="https://www.opendataphilly.org/dataset/ppr-properties">OpenDataPhilly</a></li>
+<li><a href="https://opendata.arcgis.com/datasets/d52445160ab14380a673e5849203eb64_0.geojson">GeoJSON URL</a></li>
+</ul>
+<section id="hex-map-of-the-distance-to-nearest-park" class="level4">
+<h4 class="anchored" data-anchor-id="hex-map-of-the-distance-to-nearest-park">Hex map of the distance to nearest Park</h4>
+<div class="cell" data-tags="[]" data-execution_count="90">
+<div class="cell-output cell-output-display">
+<p><img src="Data Wrangling_files/figure-html/cell-55-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="feature-5-distance-to-city-hall" class="level2">
+<h2 class="anchored" data-anchor-id="feature-5-distance-to-city-hall">6. FEATURE 5: DISTANCE TO CITY HALL</h2>
+<ul>
+<li>Source: <a href="https://www.opendataphilly.org/dataset/city-landmarks">OpenDataPhilly</a></li>
+<li><a href="http://data-phl.opendata.arcgis.com/datasets/5146960d4d014f2396cb82f31cd82dfe_0.geojson">GeoJSON URL</a></li>
+</ul>
+<section id="hex-map-of-the-distance-to-city-hall" class="level4">
+<h4 class="anchored" data-anchor-id="hex-map-of-the-distance-to-city-hall">Hex map of the distance to City Hall</h4>
+<div class="cell" data-tags="[]" data-execution_count="93">
+<div class="cell-output cell-output-display">
+<p><img src="Data Wrangling_files/figure-html/cell-58-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="feature-6-distance-to-5-nearest-residential-construction-permits-from-2022" class="level2">
+<h2 class="anchored" data-anchor-id="feature-6-distance-to-5-nearest-residential-construction-permits-from-2022">7. FEATURE 6: DISTANCE TO 5 NEAREST RESIDENTIAL CONSTRUCTION PERMITS FROM 2022</h2>
+<ul>
+<li>Source: <a href="https://www.opendataphilly.org/dataset/licenses-and-inspections-building-permits">OpenDataPhilly</a></li>
+<li>CARTO table name: “permits”</li>
+</ul>
+<section id="hex-map-of-the-distance-to-5-closest-building-permits" class="level4">
+<h4 class="anchored" data-anchor-id="hex-map-of-the-distance-to-5-closest-building-permits">Hex map of the distance to 5 closest building permits</h4>
+<div class="cell" data-tags="[]" data-execution_count="104">
+<div class="cell-output cell-output-display">
+<p><img src="Data Wrangling_files/figure-html/cell-60-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="feature-7-distance-to-the-5-nearest-aggravated-assault-in-2022" class="level2">
+<h2 class="anchored" data-anchor-id="feature-7-distance-to-the-5-nearest-aggravated-assault-in-2022">8. FEATURE 7: DISTANCE TO THE 5 NEAREST AGGRAVATED ASSAULT IN 2022</h2>
+<ul>
+<li>Source: <a href="https://www.opendataphilly.org/dataset/crime-incidents">OpenDataPhilly</a></li>
+</ul>
+<section id="hex-map-of-the-distance-to-5-closest-aggravated-assault" class="level4">
+<h4 class="anchored" data-anchor-id="hex-map-of-the-distance-to-5-closest-aggravated-assault">Hex map of the distance to 5 closest aggravated assault</h4>
+<div class="cell" data-tags="[]" data-execution_count="97">
+<div class="cell-output cell-output-display">
+<p><img src="Data Wrangling_files/figure-html/cell-62-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="feature-8-distance-to-the-5-nearest-abandoned-vehicle-311-calls-in-2022" class="level2">
+<h2 class="anchored" data-anchor-id="feature-8-distance-to-the-5-nearest-abandoned-vehicle-311-calls-in-2022">9. FEATURE 8: DISTANCE TO THE 5 NEAREST ABANDONED VEHICLE 311 CALLS IN 2022</h2>
+<ul>
+<li>Source: <a href="https://www.opendataphilly.org/dataset/311-service-and-information-requests">OpenDataPhilly</a></li>
+</ul>
+<section id="hex-map-of-the-distance-to-5-nearest-abandoned-vehicle-311-calls-in-2022" class="level4">
+<h4 class="anchored" data-anchor-id="hex-map-of-the-distance-to-5-nearest-abandoned-vehicle-311-calls-in-2022">Hex map of the distance to 5 nearest abandoned vehicle 311 calls in 2022</h4>
+<div class="cell" data-tags="[]" data-execution_count="99">
+<div class="cell-output cell-output-display">
+<p><img src="Data Wrangling_files/figure-html/cell-64-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="feature-9-distance-to-the-5-nearest-homeless-encampment-request-in-2022" class="level2">
+<h2 class="anchored" data-anchor-id="feature-9-distance-to-the-5-nearest-homeless-encampment-request-in-2022">10. FEATURE 9: DISTANCE TO THE 5 NEAREST HOMELESS ENCAMPMENT REQUEST IN 2022</h2>
+<ul>
+<li>Source: <a href="https://www.opendataphilly.org/dataset/311-service-and-information-requests">OpenDataPhilly</a></li>
+</ul>
+<section id="hex-map-of-the-distance-to-5-nearest-homeless-encampment-request-in-2022" class="level4">
+<h4 class="anchored" data-anchor-id="hex-map-of-the-distance-to-5-nearest-homeless-encampment-request-in-2022">Hex map of the distance to 5 nearest homeless encampment request in 2022</h4>
+<div class="cell" data-tags="[]" data-execution_count="101">
+<div class="cell-output cell-output-display">
+<p><img src="Data Wrangling_files/figure-html/cell-66-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/jonathan-manurung/musa-550-final/blob/main/Data Wrangling.ipynb" class="toc-action">View source</a></p></div></div></div>
+    <div class="nav-footer-right">© 2023 Jonathan Manurung. Built with <a href="https://quarto.org/">Quarto</a>.</div>
+  </div>
+</footer>
+
+
+
+</body></html>

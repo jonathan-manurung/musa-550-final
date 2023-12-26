@@ -1,31 +1,20 @@
 ---
-title: "MUSA 550 Final Project Template"
-subtitle: "An example website demonstrating the power of Quarto for sharing analyses on the web"
+title: "HOUSING MARKET PREDICTION"
+subtitle: "Data-Driven Predictions for Home Prices"
 ---
 
-## Welcome!
+## Fundamentals
 
-We can create beautiful websites that describe complex technical analyses in Python using [Quarto](https://quarto.org) 
-and deploy them online using [GitHub Pages](https://pages.github.com/). This combination of tools is a really powerful way 
-to create and share your work. This website is a demo that is meant to be used to create your own Quarto website for the 
-final project in MUSA 550. 
+Predicting house prices is important for real estate company and for potential homebuyers or sellers. For the real estate, house prices prediction can be crucial for inform market analysis, strategies, risk mitigation, and particularly for price competition. Good house price predcition considered to be advantage for the real estate company in competition with the others. Potential homebuyers and sellers are also benefit from the existence of an accurate house price prediction model.it empower potential buyers and sellers to make a data-driven decision, allocate budget effectively, negotiate confidently, and assess potential investment in a property.
 
-Quarto is a relatively new tool, but is becoming popular quickly. It's a successor 
-to the Rmarkdown ecosystem that combines functionality into a single tool and also extends its computation power to other
-languages. Most importantly for us, Quarto supports executing Python code, allowing us to convert Jupyter notebooks to HTML and share them online.  
+Obtaining accurate house price prediction is challenging. There is no such thing as a perfect prediction, but we can make a better prediction for a house price. There are many factors related to house pricing such as internal characteristic from property assessment, public amenities and disamenities nearby, crimes nearby, and market price condition. In this project, we deliver the house price prediction for city of Philadelphia using data from Philadelphia's Open Data portal. This is the most challenging part in this project, to find correlating factors or variables that directly affect the house price in one area.
+
+This website will provide the best overview of the house price prediction process, including the variables used for price-changing factors, the model-building process, and the methods for validating the accuracy of the model
+
 
 ::: {.callout-important}
-This template site, including the layout it uses, is just a suggested place to start! For your final project, you're welcome (and encouraged) to 
-make as many changes as you like to best fit your project.
+This prediction model is created to provide house price prediction in city of Philadelphia based on factos such as internal characteristic and public amenities and/or disamenities.
 :::
-
-## Find out more
-
-The code for this repository is hosted on our course's GitHub page: [https://github.com/MUSA-550-Fall-2023/quarto-website-template](https://github.com/MUSA-550-Fall-2023/quarto-website-template).
-
-We covered the basics of getting started with Quarto and GitHub Pages in week 9. Take a look at
-[the slides for lecture 9A](https://musa-550-fall-2023.github.io/content/week-9/lecture-9A.html) to find out more.
-
 
 
 
