@@ -1,4 +1,4 @@
-# MUSA 550 FINAL
+# HOUSING MARKET PREDICTION - MUSA 550 FINAL
 
 The aim of this website is to summarize the process and present the result of creating a predictive model for house price in Philadelphia
 
