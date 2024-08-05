@@ -6,8 +6,8 @@ project:
 
 website:
   title: "House Price Prediction"
-  site-url: "https://jonathan-manurung.github.io/musa-550-final" 
-  repo-url: https://github.com/jonathan-manurung/musa-550-final 
+  site-url: "https://jonathan-manurung.github.io/Housing-Market-Prediction-musa-550-final" 
+  repo-url: https://github.com/jonathan-manurung/Housing-Market-Prediction-musa-550-final 
   repo-actions: [source]
 
   page-footer:
